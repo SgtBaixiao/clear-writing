@@ -1,0 +1,41 @@
+name: Validate skill package
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check skill metadata
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import yaml
+          root = Path('skills/clear-writing')
+          text = (root / 'SKILL.md').read_text(encoding='utf-8')
+          assert text.startswith('---\n')
+          frontmatter = yaml.safe_load(text.split('---', 2)[1])
+          assert frontmatter['name'] == 'clear-writing'
+          assert isinstance(frontmatter['description'], str)
+          metadata = yaml.safe_load((root / 'agents/openai.yaml').read_text(encoding='utf-8'))
+          assert '$clear-writing' in metadata['interface']['default_prompt']
+          assert metadata['interface']['short_description']
+          PY
+      - name: Run regression tests
+        run: python -m unittest discover -s skills/clear-writing/tests -v
+      - name: Check half-width punctuation
+        run: |
+          python skills/clear-writing/scripts/clarity_check.py \
+            --strict --checks half \
+            skills/clear-writing/SKILL.md \
+            skills/clear-writing/references/*.md

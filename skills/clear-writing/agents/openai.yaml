@@ -1,0 +1,4 @@
+interface:
+  display_name: "Clear Writing"
+  short_description: "写清楚、说人话、去 AI 味"
+  default_prompt: "Use $clear-writing to revise this text for the intended reader without changing any facts."
