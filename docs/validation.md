@@ -77,6 +77,38 @@ python3 skills/clear-writing/scripts/clarity_check.py --json \
 
 用脚本检查 `SKILL.md`、`README.md` 和 `references/*.md` 中的相对链接，所有目标文件都存在。外部链接未逐一重新抓取。
 
+## 发布后验证
+
+仓库：<https://github.com/SgtBaixiao/clear-writing>
+
+### GitHub Actions
+
+首次推送的校验因工作流没有安装 PyYAML 失败，失败原因是 `ModuleNotFoundError: No module named 'yaml'`。补上 `PyYAML==6.0.3` 后重新推送，校验通过：
+
+- 工作流：`Validate skill package`
+- 运行：<https://github.com/SgtBaixiao/clear-writing/actions/runs/45775388810>
+- 结果：`success`，7 秒
+- 步骤：元数据检查、17 个回归测试、半角标点严格检查均通过
+
+运行环境为 GitHub Actions 的 Ubuntu 和 Python 3.12，与本机 Python 3.9.6 不同。两个环境都通过，说明脚本在这两个 Python 版本上都能运行。
+
+### 从 GitHub 安装
+
+在临时 `HOME` 中运行 README 的原始命令：
+
+```bash
+npx skills add SgtBaixiao/clear-writing --skill clear-writing -a codex -g
+```
+
+结果：
+
+```text
+✓ clear-writing (copied)
+  → ~/.agents/skills/clear-writing
+```
+
+随后用 `quick_validate.py` 检查安装目录，输出 `Skill is valid!`。临时安装的 `SKILL.md` 与本机文件 SHA-256 相同，说明发布包内容与本地验证过的版本一致。这次测试没有改动真实的 `~/.agents/skills/clear-writing`。
+
 ## 未验证
 
 - 没有做中文读者盲评，也没有比较不同模型使用本 Skill 前后的理解或执行效果。

@@ -1,5 +1,7 @@
 # Clear Writing
 
+![Validate skill package](https://github.com/SgtBaixiao/clear-writing/actions/workflows/validate.yml/badge.svg)
+
 一个面向中文写作、改写、审稿和交付前自检的 Agent Skill。它先确认读者要完成的任务，再组织结构、句子和措辞；把事实、数字、术语、模态和承诺的保真放在风格之前。
 
 它不替作者决定观点，也不改写代码、配置、日志、公式和引文本身。纯翻译、代码和接口语义不在改写范围内。
